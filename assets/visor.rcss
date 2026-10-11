@@ -1,0 +1,206 @@
+/*
+ * Tela de 1920x1080 vista do sofa: letra grande, contraste alto e uma unica
+ * cor de foco. Sem gradientes: o renderer de software do SDL nao tem shader.
+ *
+ *   fundo    #0b1026      painel  #161d3d
+ *   texto    #eef0fa      apagado #8b93b5
+ *   foco     #7c4dff (so selecao)
+ */
+
+body {
+	width: 100%;
+	height: 100%;
+	font-family: LatoLatin;
+	font-size: 30px;
+	color: #eef0fa;
+	background-color: #0b1026;
+}
+
+/* Assistindo: o video aparece por baixo da UI. */
+body.watch {
+	background-color: transparent;
+}
+
+div, p, h1, h2 {
+	display: block;
+}
+
+#root {
+	width: 100%;
+	height: 100%;
+}
+
+/* ---- Inicio ---- */
+
+.brand {
+	display: flex;
+	align-items: center;
+	margin: 90px 0 0 510px;
+}
+
+.brand img {
+	width: 120px;
+	height: 120px;
+	margin-right: 32px;
+	border-radius: 26px;
+}
+
+h1 {
+	font-size: 76px;
+	font-weight: bold;
+}
+
+.tagline {
+	color: #8b93b5;
+	font-size: 28px;
+	margin-top: 4px;
+}
+
+.list {
+	width: 900px;
+	margin: 70px auto 0 auto;
+}
+
+.list.tight {
+	margin-top: 30px;
+}
+
+.eyebrow {
+	color: #8b93b5;
+	font-size: 24px;
+	margin: 0 0 18px 28px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	height: 84px;
+	padding: 0 28px;
+	margin-bottom: 12px;
+	border-radius: 18px;
+	background-color: #161d3d;
+}
+
+.tight .row {
+	height: 62px;
+	margin-bottom: 8px;
+	border-radius: 14px;
+}
+
+.row.selected {
+	background-color: #7c4dff;
+}
+
+.row .title {
+	flex: 1;
+	font-weight: bold;
+}
+
+.row .value {
+	color: #8b93b5;
+}
+
+.row.selected .value {
+	color: #eef0fa;
+}
+
+.arrow {
+	font-weight: bold;
+	margin: 0 18px;
+}
+
+.help {
+	width: 900px;
+	margin: 26px auto 0 auto;
+	color: #8b93b5;
+	font-size: 26px;
+	text-align: center;
+}
+
+h2 {
+	font-size: 48px;
+	font-weight: bold;
+}
+
+h2.page {
+	width: 900px;
+	margin: 70px auto 0 auto;
+}
+
+/* ---- Cartao central (IP, conectando, erro) ---- */
+
+.card {
+	width: 900px;
+	margin: 330px auto 0 auto;
+	padding: 56px 40px;
+	border-radius: 28px;
+	background-color: #161d3d;
+	text-align: center;
+}
+
+.card .help {
+	width: auto;
+}
+
+.octets {
+	margin-top: 40px;
+	font-size: 72px;
+	font-weight: bold;
+}
+
+.octet {
+	display: inline-block;
+	width: 170px;
+	padding: 10px 0;
+	border-radius: 18px;
+	background-color: #0b1026;
+}
+
+.octet.selected {
+	background-color: #7c4dff;
+}
+
+.dot {
+	color: #8b93b5;
+	margin: 0 8px;
+}
+
+/* ---- Rodape com os botoes ---- */
+
+.footer {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 48px;
+	text-align: center;
+	font-size: 24px;
+	color: #8b93b5;
+}
+
+body.watch .footer {
+	color: #eef0fa;
+}
+
+.hint {
+	margin: 0 22px;
+}
+
+.key {
+	display: inline-block;
+	padding: 4px 14px;
+	margin-right: 12px;
+	border-radius: 10px;
+	background-color: #2a3360;
+	color: #eef0fa;
+	font-weight: bold;
+}
+
+.stats {
+	position: absolute;
+	left: 48px;
+	top: 48px;
+	padding: 12px 22px;
+	border-radius: 14px;
+	background-color: #0b1026d0;
+	font-size: 26px;
+}

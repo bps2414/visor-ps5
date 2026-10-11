@@ -1,0 +1,10 @@
+<rml>
+	<head>
+		<title>Visor</title>
+		<link type="text/rcss" href="visor.rcss"/>
+	</head>
+	<body>
+		<!-- O conteudo e gerado por App::Rebuild() -->
+		<div id="root"></div>
+	</body>
+</rml>

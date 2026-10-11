@@ -4,8 +4,8 @@
  *   3. abre o app quando o atalho e clicado.
  *
  * O atalho e um "app web": o sistema abre o navegador na deeplinkUri, que
- * aponta para o servidor HTTP minimo daqui. Ao receber o pedido, fechamos o
- * navegador e lancamos o app com o loader do websrv (third_party/websrv). */
+ * aponta para o servidor HTTP minimo daqui. Ao receber o pedido, lancamos o
+ * app com o loader do websrv (third_party/websrv). */
 
 #include <fcntl.h>
 #include <signal.h>
@@ -34,9 +34,6 @@ int sceUserServiceInitialize(void*);
 int sceAppInstUtilInitialize(void);
 int sceAppInstUtilTerminate(void);
 int sceAppInstUtilAppInstallAll(void*);
-int sceLncUtilGetAppId(const char* title_id);
-int sceSystemServiceKillApp(int app_id, int how, int reason, int core_dump);
-int sceKernelGetAppState(int app_id, int*, int*);
 int sceKernelSendNotificationRequest(int, void*, size_t, int);
 
 /* Os caminhos sao relativos a raiz do repo e a pasta de build (-I no CMake). */
@@ -144,18 +141,12 @@ static void install_tile(void) {
   sceAppInstUtilTerminate();
 }
 
-/* Fecha o navegador que o atalho abriu; sem isso ele fica na frente do app. */
-static void close_browser(void) {
-  int id = sceLncUtilGetAppId(TILE_ID);
-  if (id <= 0) return;
-  printf("[visor] fechando o navegador (app 0x%x): 0x%08x\n", id,
-         sceSystemServiceKillApp(id, -1, 0, 0));
-  for (int i = 0; i < 50 && !sceKernelGetAppState(id, 0, 0); i++) usleep(100000);
-}
-
+/* ponytail: o navegador que o atalho abre e uma janela da ShellUI e fica por
+ * cima do app ate o usuario apertar Circulo. Matar o app do atalho,
+ * sceLncUtilSetAppFocus e sceShellCoreUtilLaunchByUri("psgm:play") nao
+ * resolveram; o caminho e um atalho que lance o titulo direto, sem navegador. */
 static void launch(void) {
   char* argv[] = {DIR "/visor-app.elf", 0};
-  close_browser();
   printf("[visor] app iniciado, pid %d\n",
          hbldr_launch(DIR, argv[0], STDOUT_FILENO, argv, 0));
 }

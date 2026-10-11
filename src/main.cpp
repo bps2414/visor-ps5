@@ -1,3 +1,4 @@
+#include <csignal>
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
@@ -46,6 +47,10 @@ int SDL_main(int argc, char* args[]) {
   const std::string cwd = std::filesystem::current_path();
   Rml::Context* ctx;
   auto app = std::make_unique<App>();
+
+  // Sem isto, escrever no socket depois que o headset dorme mata o processo;
+  // ignorando, o send falha e a sessao mostra "conexao perdida".
+  signal(SIGPIPE, SIG_IGN);
 
   if (!Backend::Initialize("Visor", SCREEN_WIDTH, SCREEN_HEIGHT, false)) {
     return -1;

@@ -67,6 +67,9 @@ feito no headset.
 - **Só Quest 2 por enquanto.** Outros headsets têm telas diferentes e o recorte
   do olho sairia errado. "Os dois" olhos, nos ajustes, funciona em qualquer um.
 - O headset precisa estar acordado (na cabeça) para transmitir.
+- O ícone da tela inicial é um atalho web, então o console abre a janela do
+  navegador primeiro e a deixa na frente do Visor. Aperte Círculo uma vez para
+  dispensá-la.
 
 ## Como funciona
 

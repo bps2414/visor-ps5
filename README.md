@@ -69,6 +69,8 @@ the headset.
 - **Quest 2 only for now.** Other headsets have different screens, so the eye
   crop would be off. "Both eyes" in the settings works on anything.
 - The headset has to be awake (on your head) to stream.
+- The home screen icon is a web shortcut, so the console opens its browser
+  window first and leaves it in front of Visor. Press Circle once to dismiss it.
 
 ## How it works
 

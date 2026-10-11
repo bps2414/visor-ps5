@@ -16,27 +16,6 @@
 #define SCREEN_WIDTH  1920
 #define SCREEN_HEIGHT 1080
 
-#ifdef __SCE__
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-
-// Pede ao websrv para rodar o visor-tile.elf (o instalador do atalho da tela
-// inicial) como daemon. Ele nao faz nada se o atalho ja estiver em dia.
-static void RequestTileInstall(const std::string& dir) {
-  std::string req = "GET /hbldr?daemon=1&path=" + dir + "/visor-tile.elf&args=" +
-                    dir + " HTTP/1.0\r\n\r\n";
-  sockaddr_in sa{};
-  sa.sin_family = AF_INET;
-  sa.sin_port = htons(8080);
-  sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-  int fd = socket(AF_INET, SOCK_STREAM, 0);
-  if (!connect(fd, (sockaddr*)&sa, sizeof(sa)))
-    send(fd, req.data(), req.size(), 0);
-  close(fd);
-}
-#endif
-
 #ifndef __SCE__
 // Teste sem tela (PC): VISOR_KEYS="down ok ..." injeta teclas, uma a cada
 // meio segundo, e VISOR_SHOT=arquivo.bmp salva o ultimo frame e sai.
@@ -92,9 +71,6 @@ int SDL_main(int argc, char* args[]) {
     return -1;
   }
 
-#ifdef __SCE__
-  RequestTileInstall(cwd);
-#endif
 #ifndef __SCE__
   std::istringstream keys(getenv("VISOR_KEYS") ? getenv("VISOR_KEYS") : "");
   const char* shot = getenv("VISOR_SHOT");

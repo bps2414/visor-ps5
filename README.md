@@ -18,7 +18,8 @@ on the Quest.
 
 ## Requirements
 
-- A jailbroken PS5 running [websrv](https://github.com/ps5-payload-dev/websrv) (port 8080).
+- A jailbroken PS5 with an ELF loader listening on port 9021 (every current
+  jailbreak has one). Nothing else: no websrv, no Homebrew Launcher.
 - A Quest 2 in developer mode with ADB over Wi-Fi turned on. This needs a USB
   cable and a computer once per headset reboot:
 
@@ -30,10 +31,21 @@ on the Quest.
 
 ## Install
 
-1. Download `Visor.zip` from the [releases](../../releases).
-2. Unpack it to `/data/homebrew/Visor` on the PS5 (FTP or USB).
-3. Open **Visor** from the websrv Homebrew Launcher. The first run adds a
-   Visor shortcut to the PS5 home screen.
+1. Download `visor.elf` from the [releases](../../releases).
+2. Send it to the PS5 like any other payload, for example:
+
+   ```
+   socat -t 99999999 - TCP:<ps5-ip>:9021 < visor.elf
+   ```
+
+3. A notification says Visor is ready and a **Visor** icon shows up on the
+   home screen. Open it from there.
+
+`visor.elf` is a single file: it unpacks itself to `/data/visor`, adds the
+icon and stays in the background to open the app when the icon is pressed.
+Like every payload it is gone after a console restart, so send it again after
+jailbreaking (or add it to your loader's autoload list). The icon and your
+settings stay.
 
 The first time you connect, put the headset on: it asks whether to allow USB
 debugging. Tick "Always allow".
@@ -65,6 +77,9 @@ pushes the [scrcpy](https://github.com/Genymobile/scrcpy) server, starts it
 with the chosen crop and quality, and decodes the video stream with FFmpeg into
 an SDL2 texture. The UI is RmlUi.
 
+The app is launched as a regular PS5 application by the homebrew loader from
+[websrv](https://github.com/ps5-payload-dev/websrv), built into `visor.elf`.
+
 ## Building
 
 On Ubuntu 24.04 (WSL works), `sudo bash tools/setup-wsl.sh` installs the
@@ -72,9 +87,14 @@ compilers and the [ps5-payload-dev](https://github.com/ps5-payload-dev/pacbrew-r
 toolchain. Then:
 
 ```
-bash tools/build-ps5.sh            # dist/Visor and dist/Visor.zip
-bash tools/deploy.sh <ps5-ip>      # upload over FTP
-bash tools/ps5-run.sh <ps5-ip>     # launch and print the log
+bash tools/build-ps5.sh                          # dist/visor.elf
+bash tools/send-elf.sh <ps5-ip> dist/visor.elf   # send it to the console
+```
+
+The log of the last run is `/data/visor/visor.log` on the console.
+`curl http://<ps5-ip>:8744/` opens the app without touching the controller.
+
+```
 ```
 
 There is also a PC build for working without the console:

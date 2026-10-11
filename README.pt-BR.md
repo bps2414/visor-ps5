@@ -17,7 +17,8 @@ headset direto pelo Wi-Fi: sem PC no meio e sem instalar nada no Quest.
 
 ## Requisitos
 
-- PS5 desbloqueado rodando o [websrv](https://github.com/ps5-payload-dev/websrv) (porta 8080).
+- PS5 desbloqueado com um carregador de ELF na porta 9021 (todo jailbreak atual
+  tem). Mais nada: sem websrv, sem Homebrew Launcher.
 - Quest 2 em modo desenvolvedor com ADB por Wi-Fi ligado. Isso pede cabo USB e
   um computador uma vez a cada reinício do headset:
 
@@ -29,10 +30,20 @@ headset direto pelo Wi-Fi: sem PC no meio e sem instalar nada no Quest.
 
 ## Instalação
 
-1. Baixe o `Visor.zip` nas [releases](../../releases).
-2. Descompacte em `/data/homebrew/Visor` no PS5 (FTP ou USB).
-3. Abra o **Visor** pelo Homebrew Launcher do websrv. Na primeira execução ele
-   cria um atalho na tela inicial do PS5.
+1. Baixe o `visor.elf` nas [releases](../../releases).
+2. Envie para o PS5 como qualquer outro payload, por exemplo:
+
+   ```
+   socat -t 99999999 - TCP:<ip-do-ps5>:9021 < visor.elf
+   ```
+
+3. Uma notificação avisa que o Visor está pronto e o ícone **Visor** aparece
+   na tela inicial. Abra por ali.
+
+O `visor.elf` é um arquivo só: ele se extrai em `/data/visor`, cria o ícone e
+fica em segundo plano para abrir o app quando o ícone é apertado. Como todo
+payload, ele some quando o console reinicia: envie de novo depois do jailbreak
+(ou coloque na lista de autoload do seu carregador). O ícone e os ajustes ficam.
 
 Na primeira conexão, coloque o headset: ele pergunta se permite a depuração
 USB. Marque "Sempre permitir".
@@ -64,6 +75,9 @@ envia o servidor do [scrcpy](https://github.com/Genymobile/scrcpy), inicia com
 o recorte e a qualidade escolhidos e decodifica o vídeo com FFmpeg numa textura
 SDL2. A interface é RmlUi.
 
+O app é aberto como um aplicativo normal do PS5 pelo carregador de homebrew do
+[websrv](https://github.com/ps5-payload-dev/websrv), embutido no `visor.elf`.
+
 ## Compilando
 
 No Ubuntu 24.04 (WSL serve), `sudo bash tools/setup-wsl.sh` instala os
@@ -71,9 +85,14 @@ compiladores e o toolchain do
 [ps5-payload-dev](https://github.com/ps5-payload-dev/pacbrew-repo). Depois:
 
 ```
-bash tools/build-ps5.sh            # dist/Visor e dist/Visor.zip
-bash tools/deploy.sh <ip-do-ps5>   # envia por FTP
-bash tools/ps5-run.sh <ip-do-ps5>  # abre e mostra o log
+bash tools/build-ps5.sh                             # dist/visor.elf
+bash tools/send-elf.sh <ip-do-ps5> dist/visor.elf   # envia para o console
+```
+
+O log da última execução fica em `/data/visor/visor.log` no console.
+`curl http://<ip-do-ps5>:8744/` abre o app sem pegar no controle.
+
+```
 ```
 
 Também há um build de PC para trabalhar sem o console:
